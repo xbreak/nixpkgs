@@ -1,7 +1,8 @@
 {stdenvNoCC, subversion, glibcLocales, sshSupport ? true, openssh ? null}:
 {url, rev ? "HEAD", md5 ? "", sha256 ? ""
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
-, preferLocalBuild ? true }:
+, preferLocalBuild ? true
+, privateAuthEnvVarBase ? null }:
 
 let
   repoName = with stdenvNoCC.lib;
@@ -24,12 +25,19 @@ let
       else fst path;
 
   name_ = if name == null then "${repoName}-r${toString rev}" else name;
+
+  privateAttrs = stdenvNoCC.lib.optionalAttrs ( privateAuthEnvVarBase != null ) {
+    privateAuthEnvVarBase = privateAuthEnvVarBase;
+    impureEnvVars = [
+      "${privateAuthEnvVarBase}_USERNAME"
+      "${privateAuthEnvVarBase}_PASSWORD" ];
+    };
 in
 
 if md5 != "" then
   throw "fetchsvn does not support md5 anymore, please use sha256"
 else
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation ({
   name = name_;
   builder = ./builder.sh;
   nativeBuildInputs = [ subversion glibcLocales ];
@@ -42,4 +50,4 @@ stdenvNoCC.mkDerivation {
 
   impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
   inherit preferLocalBuild;
-}
+} // privateAttrs )

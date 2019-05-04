@@ -22,8 +22,23 @@ if test -z "$LC_ALL"; then
     export LC_ALL="en_US.UTF-8"
 fi;
 
-svn export --trust-server-cert --non-interactive \
-    ${ignoreExternals:+--ignore-externals} ${ignoreKeywords:+--ignore-keywords} \
-    -r "$rev" "$url" "$out"
+
+svnCommand=( svn export --trust-server-cert --non-interactive \
+             ${ignoreExternals:+--ignore-externals} ${ignoreKeywords:+--ignore-keywords} )
+
+if test "$privateAuthEnvVarBase"; then
+    echo "Using impure environment variables for svn client authentication: "\
+         "${privateAuthEnvVarBase}_USERNAME and ${privateAuthEnvVarBase}_PASSWORD"
+set -x
+    svnfetch_indirect () {
+        local var=$1
+        echo "${!var}"
+    }
+    svnCommand+=( --username="$(svnfetch_indirect ${privateAuthEnvVarBase}_USERNAME)"
+              --password="$(svnfetch_indirect ${privateAuthEnvVarBase}_PASSWORD)" )
+fi
+svnCommand+=( -r "$rev" "$url" "$out" )
+
+"${svnCommand[@]}"
 
 stopNest
