@@ -2,7 +2,8 @@
 {url, rev ? "HEAD", md5 ? "", sha256 ? ""
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
 , preferLocalBuild ? true
-, privateAuthEnvVarBase ? null }:
+, privateAuthEnvVarBase ? null
+, privateHomeEnv ? null }:
 
 let
   repoName = with stdenvNoCC.lib;
@@ -30,7 +31,12 @@ let
     privateAuthEnvVarBase = privateAuthEnvVarBase;
     impureEnvVars = [
       "${privateAuthEnvVarBase}_USERNAME"
-      "${privateAuthEnvVarBase}_PASSWORD" ];
+      "${privateAuthEnvVarBase}_PASSWORD"
+      ];
+    };
+  privateAttrs2 = stdenvNoCC.lib.optionalAttrs ( privateHomeEnv != null ) {
+    privateHomeEnv = privateHomeEnv;
+    impureEnvVars = [ "${privateHomeEnv}" ];
     };
 in
 
@@ -50,4 +56,4 @@ stdenvNoCC.mkDerivation ({
 
   impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
   inherit preferLocalBuild;
-} // privateAttrs )
+} // privateAttrs // privateAttrs2 )
