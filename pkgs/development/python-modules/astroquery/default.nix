@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.3.10";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ce57a8792c7d5d74206d797d379de6da35d56be433ea5840c41a49f202e2fab";
+    sha256 = "1ddwnj9vpvxkrfb45c4pwv5f5za9kn2q0040dpw2ymj2bwlpl61h";
   };
 
   propagatedBuildInputs = [ astropy requests keyring beautifulsoup4 html5lib ];
