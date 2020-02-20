@@ -2326,7 +2326,9 @@ in {
 
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
-  pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
+  pytest-astropy = callPackage ../development/python-modules/pytest-astropy {
+    hypothesis = self.hypothesis_5;
+  };
 
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
 
