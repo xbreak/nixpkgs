@@ -1237,6 +1237,8 @@ in {
 
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
 
+  pytest-filter-subpackage = callPackage ../development/python-modules/pytest-filter-subpackage { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
