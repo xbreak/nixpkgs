@@ -3876,6 +3876,19 @@ in {
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
+  hypothesis_5 = disabledIf (!isPy3k)
+    (self.hypothesis.overridePythonAttrs (oldAttrs: rec {
+    version = "5.5.4";
+    # note: fetchFromGitHub is not overridable
+    src = pkgs.fetchFromGitHub {
+      owner = "HypothesisWorks";
+      repo = "hypothesis-python";
+      rev = "hypothesis-python-${version}";
+      sha256 = "1hsi99lsiykw261v96ks3hglpy4zv76a5sfd4hhww1gfm6xz664p";
+    };
+    propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.sortedcontainers ];
+  }));
+
   colored = callPackage ../development/python-modules/colored { };
 
   xdis = callPackage ../development/python-modules/xdis { };
