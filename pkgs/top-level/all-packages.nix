@@ -34366,6 +34366,8 @@ with pkgs;
 
   pop-launcher = callPackage ../applications/misc/pop-launcher { };
 
+  pop-shell-shortcuts = callPackage ../applications/misc/pop-shell-shortcuts { };
+
   popcorntime = callPackage ../applications/video/popcorntime { };
 
   pot = callPackage ../applications/misc/pot { };
